@@ -7,4 +7,12 @@ export default defineConfig({
       streaming: true,
     },
   },
+  vite: {
+    resolve: {
+      alias: {
+        "@": "/src",
+        "~": "/",
+      },
+    },
+  },
 });

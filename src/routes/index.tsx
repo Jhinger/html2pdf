@@ -1,25 +1,20 @@
-import { A } from "@solidjs/router";
-import Counter from "~/components/Counter";
+import Hero from "@/components/Hero";
+import Features from "@/components/Features";
+import CallToAction from "@/components/CallToAction";
+import Footer from "@/components/Footer";
+import Calculator from "@/components/Calculator";
 
 export default function Home() {
   return (
-    <main class="text-center mx-auto text-gray-700 p-4">
-      <h1 class="max-6-xs text-6xl text-sky-700 font-thin uppercase my-16">Hello world!</h1>
-      <Counter />
-      <p class="mt-8">
-        Visit{" "}
-        <a href="https://solidjs.com" target="_blank" class="text-sky-600 hover:underline">
-          solidjs.com
-        </a>{" "}
-        to learn how to build Solid apps.
-      </p>
-      <p class="my-4">
-        <span>Home</span>
-        {" - "}
-        <A href="/about" class="text-sky-600 hover:underline">
-          About Page
-        </A>{" "}
-      </p>
+    <main class="relative">
+      <div class="relative z-10">
+        <Hero />
+        <Features />
+        <Calculator />
+        <CallToAction />
+        <Footer />
+      </div>
+      <div class="absolute inset-0 z-0 h-screen w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
     </main>
   );
 }

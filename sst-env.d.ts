@@ -9,14 +9,27 @@ declare module "sst" {
       "type": "sst.aws.SolidStart"
       "url": string
     }
+    "HtmlPdfAuth": {
+      "type": "sst.aws.Auth"
+      "url": string
+    }
     "HtmlPdfConverter": {
       "name": string
       "type": "sst.aws.Function"
       "url": string
     }
+    "HtmlPdfEmail": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
     "HtmlPdfRouter": {
       "type": "sst.aws.Router"
       "url": string
+    }
+    "HtmlPdfStorage": {
+      "name": string
+      "type": "sst.aws.Dynamo"
     }
   }
 }

@@ -28,7 +28,7 @@ export default $config({
 
     const auth = new sst.aws.Auth("HtmlPdfAuth", {
       issuer: {
-        handler: "src/auth/issuer.handler",
+        handler: "./src/auth/issuer.handler",
         link: [storage, email],
       },
     });
@@ -47,7 +47,9 @@ export default $config({
       timeout: "20 seconds",
     });
 
-    const app = new sst.aws.SolidStart("HtmlPdfApp");
+    const app = new sst.aws.SolidStart("HtmlPdfApp", {
+      link: [auth],
+    });
 
     const router = new sst.aws.Router("HtmlPdfRouter", {
       routes: {

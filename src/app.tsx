@@ -6,19 +6,17 @@ import "./app.css";
 
 export default function App() {
   return (
-    <>
-      <MetaProvider>
-        <Title>HTML to PDF API</Title>
-      </MetaProvider>
-      <Router
-        root={(props) => (
-          <>
-            <Suspense>{props.children}</Suspense>
-          </>
-        )}
-      >
-        <FileRoutes />
-      </Router>
-    </>
+    <Router
+      root={(props) => (
+        <>
+          <MetaProvider>
+            <Title>HTML2PDF</Title>
+          </MetaProvider>
+          <Suspense>{props.children}</Suspense>
+        </>
+      )}
+    >
+      <FileRoutes />
+    </Router>
   );
 }

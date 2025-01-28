@@ -1,5 +1,4 @@
 import OldSchoolButton from "@/components/OldSchoolButton";
-
 export default function Hero() {
   return (
     <section class="relative w-full h-[50rem] flex justify-center items-center">

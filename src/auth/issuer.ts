@@ -1,32 +1,28 @@
-import { handle } from "hono/aws-lambda";
 import { issuer } from "@openauthjs/openauth";
-import { CodeUI } from "@openauthjs/openauth/ui/code";
-import { CodeProvider } from "@openauthjs/openauth/provider/code";
-import { SendCode } from "@/email/code";
+import { handle } from "hono/aws-lambda";
 import { subjects } from "./subjects";
+import { PasswordUI } from "@openauthjs/openauth/ui/password";
+import { PasswordProvider } from "@openauthjs/openauth/provider/password";
 
 async function getUser(email: string) {
-  // Get user from database and return user ID
   return email;
 }
 
 const app = issuer({
   subjects,
-  // Remove after setting custom domain
-  allow: async () => true,
   providers: {
-    code: CodeProvider(
-      CodeUI({
-        sendCode: async (claims, code) => {
-          await SendCode(claims.email, code);
+    password: PasswordProvider(
+      PasswordUI({
+        sendCode: async (email, code) => {
+          console.log(email, code);
         },
       }),
     ),
   },
   success: async (ctx, value) => {
-    if (value.provider === "code") {
+    if (value.provider === "password") {
       return ctx.subject("user", {
-        email: await getUser(value.claims.email),
+        email: await getUser(value.email),
       });
     }
     throw new Error("Invalid provider");

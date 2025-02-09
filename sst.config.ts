@@ -28,9 +28,13 @@ export default $config({
 
     const auth = new sst.aws.Auth("HtmlPdfAuth", {
       issuer: {
-        handler: "./src/auth/issuer.handler",
+        handler: "src/auth/issuer.handler",
         link: [storage, email],
       },
+    });
+
+    const app = new sst.aws.SolidStart("HtmlPdfApp", {
+      link: [auth],
     });
 
     /* NOTE: Probably need to stick API Gateway infront of Convert API. */
@@ -39,16 +43,12 @@ export default $config({
       url: {
         cors: {
           allowMethods: ["GET", "POST"],
-          allowOrigins: ["https://d19vm4my4owd2f.cloudfront.net"],
+          allowOrigins: [app.url],
         },
       },
       description: "Handles converting html templates to PDFs",
       memory: "1 GB",
       timeout: "20 seconds",
-    });
-
-    const app = new sst.aws.SolidStart("HtmlPdfApp", {
-      link: [auth],
     });
 
     const router = new sst.aws.Router("HtmlPdfRouter", {

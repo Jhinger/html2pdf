@@ -1,6 +1,7 @@
 import { issuer } from "@openauthjs/openauth";
 import { handle } from "hono/aws-lambda";
 import { subjects } from "./subjects";
+import { SendCode } from "@/email/code";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { PasswordProvider } from "@openauthjs/openauth/provider/password";
 
@@ -10,11 +11,12 @@ async function getUser(email: string) {
 
 const app = issuer({
   subjects,
+  allow: async () => true,
   providers: {
     password: PasswordProvider(
       PasswordUI({
         sendCode: async (email, code) => {
-          console.log(email, code);
+          await SendCode(email, code);
         },
       }),
     ),

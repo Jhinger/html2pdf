@@ -15,8 +15,8 @@ export const SendCode = async (email: string, code: string) => {
             Data: "[HTML2PDF] Verification Code",
           },
           Body: {
-            Text: {
-              Data: `Your verification code is ${code}`,
+            Html: {
+              Data: `Your verification code is: <br /><h1><strong>${code}</strong></h1>`,
             },
           },
         },

@@ -4,11 +4,12 @@ import {
   deleteCookie,
   getRequestHeaders,
 } from "vinxi/http";
-import { isServer } from "solid-js/web";
 import { redirect, query } from "@solidjs/router";
 import { subjects } from "./subjects";
 import { getRequestEvent } from "solid-js/web";
 import { client } from "@/auth/client";
+import { action } from "@solidjs/router";
+import { revalidate, reload } from "@solidjs/router";
 import type { HTTPEvent } from "vinxi/http";
 
 export async function setTokens(
@@ -35,8 +36,6 @@ export async function setTokens(
 export const auth = query(async () => {
   "use server";
   const event = getRequestEvent();
-
-  console.log("Is server: ", isServer);
 
   if (!event) return false;
 
@@ -66,7 +65,9 @@ export const auth = query(async () => {
   return verified.subject;
 }, "user_auth");
 
-export async function login() {
+export const authCacheKey = auth.key;
+
+export const login = action(async () => {
   "use server";
   const event = getRequestEvent();
 
@@ -85,7 +86,7 @@ export async function login() {
         verified.tokens.access,
         verified.tokens.refresh,
       );
-      redirect("/");
+      throw redirect("/", 303);
     }
   }
 
@@ -93,13 +94,16 @@ export async function login() {
   const host = headers.host;
   const protocol = host?.includes("localhost") ? "http" : "https";
   const { url } = await client.authorize(
-    `${protocol}://${host}/api/callback`,
+    `${protocol}://${host}/api/auth/callback`,
     "code",
   );
-  redirect(url);
-}
 
-export async function logout() {
+  console.log("Redirect URL: ", url);
+
+  throw redirect(url, 303);
+});
+
+export const logout = action(async () => {
   "use server";
   const event = getRequestEvent();
 
@@ -108,5 +112,9 @@ export async function logout() {
   deleteCookie(event.nativeEvent, "access_token");
   deleteCookie(event.nativeEvent, "refresh_token");
 
-  redirect("/");
-}
+  // TODO: update to only use one.
+  await revalidate(authCacheKey);
+  reload({ revalidate: authCacheKey });
+
+  throw redirect("/", 303);
+});
